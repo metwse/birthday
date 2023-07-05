@@ -1,0 +1,10 @@
+:root {
+    --color: black;
+    --bg-body: #FFC21C;
+    --bg-h1: white;
+
+    --bg-li-title: black;
+    --bg-li-days: white;
+    --color-li-title: white;
+    --color-li-days: black;
+}

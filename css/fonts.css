@@ -1,0 +1,17 @@
+@font-face { 
+    font-family: 'digital-display'; 
+    src: url('/fonts/digital-display-regular.woff2')
+}
+
+
+@font-face { 
+    font-family: 'iosevka'; 
+    src: url('/fonts/iosevka-medium.woff2')
+}
+@font-face { 
+    font-family: 'iosevka'; 
+    src: url('/fonts/iosevka-bold.ttf');
+    font-weight: bold
+}
+
+
