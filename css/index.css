@@ -1,10 +1,41 @@
 * { box-sizing: border-box; color: inherit; font-size: inherit; font-family: inherit; -webkit-tap-highlight-color: transparent }
 
+body {
+    margin: 0; padding: 2em; min-height: 100vh;
+    position: relative;
+    color: var(--color);
+    background: repeating-linear-gradient(-30deg, transparent 0, transparent 1.4em, var(--color) 1.5em, var(--color) 2.9em, transparent 3em), var(--bg-body);
+    font-family: iosevka
+}
+body:after, body:before {
+    content: ''; display: block; width: 100%; height: 2em;
+    background: repeating-linear-gradient(-60deg, transparent 0, transparent 1.4em, var(--color) 1.5em, var(--color) 2.9em, transparent 3em), var(--bg-body);
+    position: absolute; left: 0;
+}
+body:before { top: 0; border-bottom: solid .125em var(--color) }
+body:after { bottom: 0; border-top: solid .125em var(--color) }
 
-body { font-family: iosevka; margin: 0; background: var(--bg-body); color: var(--color) }
+main { 
+    padding: 3em 0; min-height: calc(100vh - 4em);
+    background: var(--bg-body); color: var(--color);
+    border: solid .125em var(--color);
+    border-top: none; border-bottom: none
+}
+
+@media (max-width: 450px) {
+    body { padding: 2em 0 }
+    main { border: none }
+    h1 { font-size: 2.5em !important }
+}
+@media (max-width: 300px) {
+    body { font-size: .75rem }
+}
+
+
+
 
 h1 { 
-    font-size: 3em; padding: .75em 1.5em; margin: 1em auto; width: fit-content;
+    font-size: 3em; padding: .75em 1.5em; margin: 0 auto 1em; width: fit-content;
     position: relative;
     background: var(--bg-h1);
     border: solid .05em var(--color);
@@ -26,7 +57,7 @@ h1:after {
 
 
 ul { 
-    display: flex; gap: 1em; padding: 0 2em;
+    display: flex; gap: 2em; padding: 0 2em;
     flex-direction: column; align-items: center; 
     list-style: none
 }
