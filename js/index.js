@@ -39,6 +39,21 @@ class Calendar {
             'Kumuk\'u': 20,
             '-': 5,
         },
+        'tzolk\'in': {
+            '1': 20,
+            '2': 20,
+            '3': 20,
+            '4': 20,
+            '5': 20,
+            '6': 20,
+            '7': 20,
+            '8': 20,
+            '9': 20,
+            '10': 20,
+            '11': 20,
+            '12': 20,
+            '13': 20,
+        },
         'ancient egyptian': {
             'Thoth': 30,
             'Phaophi': 30,
@@ -53,13 +68,57 @@ class Calendar {
             'Epiphi': 30,
             'Mesore': 30,
             '-': 5
+        },
+        'pawukon': {
+            'Sinta': 7,
+            'Landep': 7,
+            'Ukir': 7,
+            'Kulantir': 7,
+            'Taulu': 7,
+            'Gumbreg': 7,
+            'Wariga': 7,
+            'Warigadian': 7,
+            'Julungwangi': 7,
+            'Sungsang': 7,
+            'Dunggulan': 7,
+            'Kuningan': 7,
+            'Langkir': 7,
+            'Medangsia': 7,
+            'Pujut': 7,
+            'Pahang': 7,
+            'Krulut': 7,
+            'Merakih': 7,
+            'Tambir': 7,
+            'Medangkungan': 7,
+            'Matal': 7,
+            'Uye': 7,
+            'Menail': 7,
+            'Parangbakat': 7,
+            'Bala': 7,
+            'Ugu': 7,
+            'Wayang': 7,
+            'Kelawu': 7,
+            'Dukut': 7,
+            'Watugunung': 7,
+        }
+    }
+
+    static MISC = {
+        'tzolk\'in': {
+            dayNames: ['Imıx', 'Ik\'', 'Ak\'b\'al', 'K\'an', 'Chikchan', 'Kimi', 'Manik\'', 'Lamat', 'Muluk', 'Ok', 'Chuwen', 'Eb\'', 'B\'en', 'Ix', 'Men', 'Kib\'', 'Kab\'an', 'Etz\'nab\'', 'Kawak', 'Ajaw']
+        },
+        'pawukon': {
+            dayNames: ['Redite', 'Soma', 'Anggara', 'Buda', 'Wraspati', 'Sukra', 'Saniscara']
         }
     }
 
     static EPOCH = {
-        'hijri': [1389, 10, 22],
+        'hijri': [1389, 10, 23],
         'haab\'': [0, 14, 3],
-        'ancient egyptian': [1834, 9, 6]
+        'ancient egyptian': [1834, 9, 6],
+        'tzolk\'in': [0, 4, 4],
+        'pawukon': [0, 5, 5],
+        'gregorian': [1970, 1, 1]
     }
 
     static DAYS = Object.fromEntries(Object.entries(Calendar.MONTHS).map(([c, m]) => { return [c, Object.values(m)] }))
@@ -77,21 +136,29 @@ class Calendar {
 
     epoch() {
         this.date = [...Calendar.EPOCH[this.type]]
+        this.gdate = new Date(0)
         this.formatYear()
     }
 
     set date(date) { this.__date = date, this._date = [date[0], date[1] - 1, date[2] - 1] }
     get date() { return this.__date }
-    get dayOfYear() { return (this._date[1] > 0 ? this.days.slice(0, this._date[1]).reduce((a, b) => a + b) : 0) + this.date[2] }
+    get dayOfYear() { 
+        if (this.type == 'gregorian') return ~~((this.gdate.getTime() - new Date(this.gdate.getFullYear(), 0, 0).getTime()) / Calendar.DAY_IN_MS)
+        else return (this._date[1] > 0 ? this.days.slice(0, this._date[1]).reduce((a, b) => a + b) : 0) + this.date[2]
+    }
 
     toString() {
         switch (this.type) {
             case 'haab\'': return `${this.date[2]} ${Object.keys(Calendar.MONTHS[this.type])[this._date[1]]}` 
+            case 'tzolk\'in': return `${Calendar.MISC['tzolk\'in'].dayNames[this.dayOfYear % 20]} ${this.dayOfYear % 13 + 1}` 
+            case 'pawukon': return `${this.dayOfYear} ${Calendar.MISC['pawukon'].dayNames[(this.dayOfYear - 1) % 7]}-${Object.keys(Calendar.MONTHS[this.type])[this._date[1]]}` 
+            case 'gregorian': return this.gdate.toLocaleDateString(navigator.language, { year: 'numeric', month: 'long', day: 'numeric' })
             default: return `${this.date[2]} ${Object.keys(Calendar.MONTHS[this.type])[this._date[1]]} ${this.date[0]}` 
         }
     }
 
     formatYear() {
+        if (this.type == 'gregorian') return [this.days, this.totalDays] = [null, this.isLeapYear ? 366 : 365]
         if (this.isLeapYear) {
             switch (this.type) {
                 case 'hijri': 
@@ -107,6 +174,7 @@ class Calendar {
     get isLeapYear() {
         switch (this.type) {
             case 'hijri': return !!+'001001010010010100100100101001'[this.date[0] % 30]
+            case 'gregorian': return (this.gdate.getFullYear() % 4 === 0 && this.gdate.getFullYear() % 100 > 0) || this.gdate.getFullYear() % 400 == 0
             default: break
         }
     }
@@ -114,6 +182,8 @@ class Calendar {
     addDays(_days) {
         let days = _days
         this.time += days * Calendar.DAY_IN_MS, this.daysSinceEpoch += days
+        this.gdate.setTime(this.time)
+        if (this.type == 'gregorian') return this.formatYear()
         while (days > 0) {
             let month = this._date[1]
             let daysRemainsInMonth = this.days[month] - this.date[2]
