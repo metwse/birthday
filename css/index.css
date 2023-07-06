@@ -76,7 +76,7 @@ li .title {
     text-align: center; justify-content: space-between; align-items: center 
 }
 li .title .days-left { filter: brightness(50%) }
-li .title .calendar { font-weight: bold } 
+li .title .calendar-name { text-transform: capitalize; font-weight: bold } 
 li .title .circle, 
 li .title .circle:after { 
     width: .75em; min-width: .75em; height: .75em;
@@ -105,8 +105,15 @@ li .days {
 }
 li .days span { 
     display: flex; font-size: 6em; padding-left: .06em; width: .875em; height: 1.125em; line-height: 0; 
+    position: relative;
     background: var(--bg-li-days); border: solid calc(.125em / 12) black; border-top: none; border-bottom: none;
     justify-content: center; align-items: center
+}
+li .days span.gray:after {
+    content: ''; display: block; 
+    background: var(--bg-li-days);
+    position: absolute; inset: 0;
+    opacity: .5
 }
 /* }}} */
 
