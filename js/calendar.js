@@ -6,11 +6,12 @@ const d = document, w = window
 const template = d.querySelector('template')
 const ul = d.querySelector('ul')
 const birthday = new Date('2006/07/05').getTime() + Calendar.DAY_IN_MS
-const now = ~~(new Date().getTime() / Calendar.DAY_IN_MS) * Calendar.DAY_IN_MS
+const now = ~~(new Date().getTime() / Calendar.DAY_IN_MS + 1) * Calendar.DAY_IN_MS
 
 
 function li(calendar) {
     const li = d.createElement('li')
+    li.calendar = calendar
     li.innerHTML = template.innerHTML
     let daysLeft = '' + (calendar.daysSinceEpoch - ~~(now / Calendar.DAY_IN_MS))
     let gray = true
