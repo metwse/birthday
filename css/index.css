@@ -126,3 +126,11 @@ li .desc {
 li .desc .next { opacity: .5 }
 li .desc .calendar { text-decoration: underline }
 /* }}} */
+ 
+
+.date { width: fit-content; margin: auto }
+::-webkit-datetime-edit-fields-wrapper { background: none; }
+::-webkit-datetime-edit-text { color: var(--color); padding: 0 0 }
+input { background: none; border: none; outline: none; border-bottom: 1px solid var(--color) }
+button { padding: .25em .5em; border: 1px solid var(--color); border-radius: .5em; outline: none }
+button:hover { cursor: pointer; filter: brightness(1.1) }
